@@ -73,32 +73,32 @@ void Scene_Build::BG_scroll()//z
 {
 	Window_config Win_config;
 	bool MosueLeftInput = MouseDown && !oldMouseDown;
-	bool scrollLeftFlag = MousePos[0] > 192 && MousePos[0] < 192 + 32 && MousePos[1] > Win_config.WIN_HEIGHT / 2 - 32 && MousePos[1] < Win_config.WIN_HEIGHT / 2 + 32;
-	bool scrollRightFlag = MousePos[0] > Win_config.WIN_WIDTH - 32 && MousePos[0] < Win_config.WIN_WIDTH && MousePos[1] > Win_config.WIN_HEIGHT / 2 - 32 && MousePos[1] < Win_config.WIN_HEIGHT / 2 + 32;
+	bool ScrollLeftFlag = MousePos[0] > 192 && MousePos[0] < 192 + 32 && MousePos[1] > Win_config.WIN_HEIGHT / 2 - 32 && MousePos[1] < Win_config.WIN_HEIGHT / 2 + 32;
+	bool ScrollRightFlag = MousePos[0] > Win_config.WIN_WIDTH - 32 && MousePos[0] < Win_config.WIN_WIDTH && MousePos[1] > Win_config.WIN_HEIGHT / 2 - 32 && MousePos[1] < Win_config.WIN_HEIGHT / 2 + 32;
 
 	int scrollVel = 100;
 
-	if (scrollRightFlag && MosueLeftInput)
+	if (World_x_adjust <= 0 && World_x_adjust >= - Win_config.WIN_WIDTH)
 	{
-		BG_X[0] -= scrollVel;
-		BG_X[1] -= scrollVel;
-		World_x_adjust -= scrollVel;
-	}
-	if (scrollLeftFlag && MosueLeftInput)
-	{
-		BG_X[0] += scrollVel;
-		BG_X[1] += scrollVel;
-		World_x_adjust += scrollVel;
-	}
-	for (int i = 0; i < 2; ++i)
-	{
-		if (BG_X[i] < -Win_config.WIN_WIDTH)
+		if (ScrollRightFlag && MosueLeftInput)
 		{
-			BG_X[i] = Win_config.WIN_WIDTH - scrollVel;
+			World_x_adjust -= scrollVel;
 		}
-		if (BG_X[i] > Win_config.WIN_WIDTH)
+		if (ScrollLeftFlag && MosueLeftInput)
 		{
-			BG_X[i] = -Win_config.WIN_WIDTH + scrollVel;
+			World_x_adjust += scrollVel;
 		}
 	}
+	if (World_x_adjust > 0)
+	{
+		World_x_adjust = 0;
+	}
+	else if (World_x_adjust < - Win_config.WIN_WIDTH)
+	{
+		World_x_adjust = - Win_config.WIN_WIDTH;
+	}
+
+	BG_X[0] = World_x_adjust;
+	BG_X[1] = World_x_adjust + Win_config.WIN_WIDTH;
+
 }
